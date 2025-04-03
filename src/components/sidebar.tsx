@@ -1,4 +1,5 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 
 const Sidebar: React.FC = () => {
   return (
@@ -14,8 +15,8 @@ const Sidebar: React.FC = () => {
           <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">MAIN</p>
         </div>
         <nav className="px-2 space-y-1">
-          <a
-            href="#"
+          <NavLink
+            to="/leads"
             className="flex items-center px-2 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-md group"
           >
             <svg className="mr-3 h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -27,9 +28,9 @@ const Sidebar: React.FC = () => {
               />
             </svg>
             Leads
-          </a>
-          <a
-            href="#"
+          </NavLink>
+          <NavLink
+            to="/analytics"
             className="flex items-center px-2 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-md group"
           >
             <svg className="mr-3 h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -41,7 +42,7 @@ const Sidebar: React.FC = () => {
               />
             </svg>
             Analytics
-          </a>
+          </NavLink>
         </nav>
         <div className="px-4 pt-6 pb-2">
           <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">MORE</p>

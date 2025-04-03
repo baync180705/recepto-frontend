@@ -1,108 +1,41 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/navbar';
 import Sidebar from '../components/sidebar';
 import LeadCard from '../components/leads';
-import { Lead } from '../models/leads';
+import { leads } from '../data/leads';
+import users  from '../data/users';
 
 const LeadsPage: React.FC = () => {
 
-    const leads: Lead[] = [
-    {
-      id: 1,
-      name: "Jennifer Markus",
-      location: "Mumbai, India",
-      isLocked: true,
-      message: "Looking for recommendations on product analytics tools for our B2B SaaS platform. Currently evaluating options for a team of 50...",
-      timeStatus: "Found 2 hour ago",
-      source: "ReceptoNet",
-      score: 99,
-      company: "Org's Network",
-      companyTier: 3,
-      jobDescription: "A team from *company name mentioned* is seeking a highly motivated Business Development Executive to outreach and secure bo...",
-      updatedTime: "3 hours ago",
-      groupName: "Group name",
-      avatarColor: "#3366cc"
-    },
-    {
-      id: 2,
-      name: "Jennifer Markus",
-      location: "Mumbai, India",
-      isLocked: false,
-      message: "",
-      company: "Org's Network",
-      companyTier: 3,
-      jobDescription: "A team from *company name mentioned* is seeking a highly motivated Business Development Executive to outreach and secure bo...",
-      updatedTime: "3 hours ago",
-      groupName: "Group name",
-      score: 74,
-      avatarColor: "#ffffff"
-    },
-    {
-      id: 3,
-      name: "Jennifer",
-      location: "Mumbai, India",
-      isLocked: true,
-      unlockCredits: 0,
-      message: "Looking for recommendations on product analytics tools for our B2B SaaS platform. Currently evaluating options for a team of 50...",
-      timeStatus: "Found 2 hour ago",
-      source: "ReceptoNet",
-      score: 99,
-      avatarColor: "#3366cc"
-    },
-    {
-      id: 4,
-      name: "Jennifer Markus",
-      location: "Mumbai, India",
-      isLocked: false,
-      unlockCredits: 3,
-      company: "Org's Network",
-      companyTier: 1,
-      jobDescription: "A team from *company name mentioned* is seeking a highly motivated Business Development Executive to outreach and secure bo...",
-      updatedTime: "Today",
-      groupName: "Group name",
-      score: 74,
-      avatarColor: "#cc3333"
-    },
-    {
-      id: 5,
-      name: "Jennifer Markus",
-      location: "Mumbai, India",
-      isLocked: false,
-      company: "Org's Network",
-      companyTier: 3,
-      jobDescription: "A team from *company name mentioned* is seeking a highly motivated Business Development Executive to outreach and secure bo...",
-      updatedTime: "3 hours ago",
-      groupName: "Group name",
-      score: 74,
-      avatarColor: "#ffffff"
-    },
-    {
-      id: 6,
-      name: "Jennifer Markus",
-      location: "Mumbai, India",
-      isLocked: false,
-      company: "Org's Network",
-      companyTier: 3,
-      jobDescription: "A team from *company name mentioned* is seeking a highly motivated Business Development Executive to outreach and secure bo...",
-      updatedTime: "3 hours ago",
-      groupName: "Group name",
-      score: 74,
-      avatarColor: "#ffffff"
-    },
-    {
-      id: 7,
-      name: "Jennifer Markus",
-      location: "Mumbai, India",
-      isLocked: false,
-      company: "Org's Network",
-      companyTier: 3,
-      jobDescription: "A team from *company name mentioned* is seeking a highly motivated Business Development Executive to outreach and secure bo...",
-      updatedTime: "3 hours ago",
-      groupName: "Group name",
-      score: 74,
-      avatarColor: "#ffffff"
-    },
-  ];
+  let isAuthenticated: string | null = localStorage.getItem("isAuthenticated");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    checkAuthentication();
+   }, []);
+
+  const checkAuthentication = () => {    
+    if (isAuthenticated === null) {
+      let user: string | null = prompt("Enter username:");
+      if (user) {
+        const foundUser = users.find((u) => u.username === user);
+        let password = prompt("Enter password:");
+        if (foundUser && foundUser.password === password) {
+          alert("Login successful");
+          isAuthenticated = "true";
+          localStorage.setItem("isAuthenticated", `${isAuthenticated}`);
+        } else {
+          alert("Invalid username or password");
+          navigate("/");
+        }
+      } else {
+        alert("Invalid username");
+        navigate("/");
+      }
+    }
+  }
+  
 
   return (
     <div className="flex h-screen w-screen">

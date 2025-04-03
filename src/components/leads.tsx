@@ -1,5 +1,5 @@
 import React from 'react';
-import { Lead } from '../models/leads';
+import { Lead } from '../types/leads';
 import { LockClosedIcon, LockOpenIcon } from '@heroicons/react/24/outline';
 
 interface LeadCardProps {

@@ -1,7 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import Logout from './logout';
 
 const Sidebar: React.FC = () => {
+  const [showLogout, setShowLogout] = useState(false);
+
+  const handleLogoutClick = () => {
+    setShowLogout(true);
+  };
+
+  const handleCancel = () => {
+    setShowLogout(false);
+  };
+
+  const handleConfirm = () => {
+    localStorage.removeItem("isAuthenticated");
+    window.location.href = "/";
+    setShowLogout(false);
+  };
+
   return (
     <div className="w-56 bg-white shadow-md flex flex-col h-full">
       <div className="p-4">
@@ -16,10 +33,19 @@ const Sidebar: React.FC = () => {
         </div>
         <nav className="px-2 space-y-1">
           <NavLink
-            to="/leads"
-            className="flex items-center px-2 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-md group"
+            to="/"
+            className={({ isActive }) =>
+              `flex items-center px-2 py-2 text-sm font-medium rounded-md group ${isActive ? 'text-blue-600 bg-blue-50' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+              }`
+            }
           >
-            <svg className="mr-3 h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg
+              // className="mr-3 h-5 w-5" // Resized icon
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              className="mr-3 h-6 w-6 text-blue-500"
+            >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -31,9 +57,17 @@ const Sidebar: React.FC = () => {
           </NavLink>
           <NavLink
             to="/analytics"
-            className="flex items-center px-2 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-md group"
+            className={({ isActive }) =>
+              `flex items-center px-2 py-2 text-sm font-medium rounded-md group ${isActive ? 'text-blue-600 bg-blue-50' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+              }`
+            }
           >
-            <svg className="mr-3 h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg
+              className="mr-3 h-6 w-6 text-blue-500" // Resized icon
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -48,9 +82,9 @@ const Sidebar: React.FC = () => {
           <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">MORE</p>
         </div>
         <nav className="px-2 space-y-1">
-          <a
-            href="#"
-            className="flex items-center px-2 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-md group"
+          <nav
+            onClick={handleLogoutClick}
+            className="flex items-center px-2 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-md group cursor-pointer"
           >
             <svg className="mr-3 h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path
@@ -61,9 +95,10 @@ const Sidebar: React.FC = () => {
               />
             </svg>
             Logout
-          </a>
+          </nav>
         </nav>
       </div>
+      {showLogout && <Logout onConfirm={handleConfirm} onCancel={handleCancel} />}
     </div>
   );
 };

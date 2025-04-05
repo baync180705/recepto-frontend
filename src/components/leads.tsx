@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Lead } from '../types/leads';
 import { LockClosedIcon, LockOpenIcon } from '@heroicons/react/24/outline';
 
@@ -7,6 +7,7 @@ interface LeadCardProps {
 }
 
 const LeadCard: React.FC<LeadCardProps> = ({ lead }) => {
+  const [score, setScore] = useState<number>(lead.score || 0);
   return (
     <div className={`border-l-4 ${lead.isLocked ? 'border-blue-500' : 'border-green-500'} bg-white p-4 rounded-lg shadow`}>
       <div className="flex items-start">
@@ -84,17 +85,17 @@ const LeadCard: React.FC<LeadCardProps> = ({ lead }) => {
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
                   lead.score > 90 ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'
                 } font-medium text-sm`}>
-                  {lead.score}
+                  {score}
                 </div>
               )}
               
-              <button className="text-gray-400 hover:text-green-500">
+              <button className="text-gray-400 hover:text-green-500" onClick={() => setScore(score+1)}>
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
                 </svg>
               </button>
               
-              <button className="text-gray-400 hover:text-red-500">
+              <button className="text-gray-400 hover:text-red-500" onClick={() => setScore(score-1)}>
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14H5.236a2 2 0 01-1.789-2.894l3.5-7A2 2 0 018.736 3h4.018a2 2 0 01.485.06l3.76.94m-7 10v5a2 2 0 002 2h.096c.5 0 .905-.405.905-.905 0-.714.211-1.412.608-2.006L17 13V4m-7 10h2" />
                 </svg>

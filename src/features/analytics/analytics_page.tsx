@@ -1,10 +1,10 @@
 import React from 'react';
-import Navbar from '../components/navbar';
-import Sidebar from '../components/sidebar';
-import SourceCard from '../components/source_card';
-import StatCard from '../components/stat_card';
-import TeamTable from '../components/team_table';
-import Pagination from '../components/pagination';
+import Navbar from '../../components/navbar';
+import Sidebar from '../../components/sidebar';
+import SourceCard from '../../components/source_card';
+import StatCard from '../../components/stat_card';
+import TeamTable from '../../components/team_table';
+import Pagination from '../../components/pagination';
 
 const Dashboard: React.FC = () => {
   // Sample data
@@ -112,7 +112,6 @@ const Dashboard: React.FC = () => {
               </div>
             </div>
             
-            {/* Source Cards */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
               {sourceCards.map(card => (
                 <SourceCard 
@@ -126,7 +125,6 @@ const Dashboard: React.FC = () => {
               ))}
             </div>
             
-            {/* Stat Cards */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
               {statCards.map(card => (
                 <StatCard 
@@ -139,7 +137,6 @@ const Dashboard: React.FC = () => {
               ))}
             </div>
             
-            {/* Team Table */}
             <div className="bg-white rounded-lg shadow overflow-hidden">
               <TeamTable members={teamMembers} />
               <Pagination currentPage={1} totalPages={7} />

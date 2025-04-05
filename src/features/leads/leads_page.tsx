@@ -1,30 +1,38 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../components/navbar';
-import Sidebar from '../components/sidebar';
-import LeadCard from '../components/leads';
-import { leads } from '../data/leads';
-import users  from '../data/users';
+import { useDispatch } from 'react-redux';
+import {setName}  from '../../slices/user_slice';
+import Navbar from '../../components/navbar';
+import Sidebar from '../../components/sidebar';
+import LeadCard from '../../components/leads';
+import { leads } from '../../data/leads';
+import users  from '../../data/users';
 
 const LeadsPage: React.FC = () => {
 
-  let isAuthenticated: string | null = localStorage.getItem("isAuthenticated");
+  const isAuthenticated: string | null = localStorage.getItem("isAuthenticated");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const [isUserAuthenticated, setIsUserAuthenticated] = useState<boolean>(false);
+  const [creditCount, setCreditCount] = useState<number>(100);
 
   useEffect(() => {
     checkAuthentication();
    }, []);
 
   const checkAuthentication = () => {    
-    if (isAuthenticated === null) {
-      let user: string | null = prompt("Enter username:");
+    if (isAuthenticated === "null") {
+      setIsUserAuthenticated(false);
+      const user: string | null = prompt("Enter username:");
       if (user) {
         const foundUser = users.find((u) => u.username === user);
-        let password = prompt("Enter password:");
+        const password: string | null = prompt("Enter password:");
         if (foundUser && foundUser.password === password) {
           alert("Login successful");
-          isAuthenticated = "true";
           localStorage.setItem("isAuthenticated", `${isAuthenticated}`);
+          setIsUserAuthenticated(true);
+          dispatch(setName(user));
         } else {
           alert("Invalid username or password");
           navigate("/");
@@ -38,7 +46,7 @@ const LeadsPage: React.FC = () => {
   
 
   return (
-    <div className="flex h-screen w-screen">
+    <div className={`${!isUserAuthenticated ? 'blur-sm pointer-events-none select-none' : ''} flex h-screen w-screen`}>
       <Sidebar />
       <div className="flex-1 flex flex-col overflow-hidden bg-gray-50">
         <Navbar />
@@ -70,7 +78,7 @@ const LeadsPage: React.FC = () => {
                   <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                   </svg>
-                  <span>0 credits</span>
+                  <span>{creditCount} credits</span>
                 </button>
                 <div className="flex items-center space-x-2">
                   <div className="flex items-center justify-center bg-blue-50 text-blue-800 p-2 rounded-lg">

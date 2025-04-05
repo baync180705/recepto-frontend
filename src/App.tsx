@@ -1,7 +1,7 @@
 import { JSX } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import LeadsPage  from './pages/leads_page';
-import AnalyticsPage from './pages/analytics_page';
+import LeadsPage  from './features/leads/leads_page';
+import AnalyticsPage from './features/analytics/analytics_page';
 import './App.css';
 
 function App(): JSX.Element {

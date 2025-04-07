@@ -11,9 +11,9 @@ import {
     Legend,
     Filler
 } from 'chart.js';
+import { SourceCardProps } from '../types/charts';
+import { lineOptions } from '../data/line_options';
 
-import { SourceCardProps, LineOptions } from '../types/charts';
-// Register Chart.js components
 ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -27,52 +27,6 @@ ChartJS.register(
 
 
 const SourceCard: React.FC<SourceCardProps> = ({ icon, title, total, chartData, stats }) => {
-    // Chart options
-    const options: LineOptions = {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                display: false,
-            },
-            tooltip: {
-                mode: "index" as const,
-                intersect: false,
-            },
-        },
-        scales: {
-            x: {
-                grid: {
-                    display: false,
-                },
-            },
-            y: {
-                grid: {
-                    color: 'rgba(0, 0, 0, 0.05)',
-                },
-                ticks: {
-                    //   callback: function(value: number) {
-                    //     if (value === 0) return '0';
-                    //     if (value === 100) return '100';
-                    //     if (value === 200) return '200';
-                    //     if (value === 300) return '300';
-                    //     if (value === 400) return '400';
-                    //     return '';
-                    //   }
-                    callback: (value) => `$${value}`,
-                },
-                min: 0,
-                max: 400,
-            },
-        },
-        // elements: {
-        //   point: {
-        //     radius: 0,
-        //     hitRadius: 10,
-        //     hoverRadius: 5,
-        //   },
-        // },
-    };
 
     return (
         <div className="bg-white rounded-lg shadow p-6">
@@ -109,7 +63,7 @@ const SourceCard: React.FC<SourceCardProps> = ({ icon, title, total, chartData, 
             <div className="h-40 mb-4">
                 <Line
                     data={chartData}
-                    options={options}
+                    options={lineOptions}
                 />
             </div>
 

@@ -1,28 +1,36 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import {setName}  from '../../slices/user_slice';
+import { useDispatch, useSelector } from 'react-redux';
+import { setName } from '../../slices/user_slice';
 import Navbar from '../../components/navbar';
 import Sidebar from '../../components/sidebar';
 import LeadCard from '../../components/leads';
 import { leads } from '../../data/leads';
-import users  from '../../data/users';
+import users from '../../data/users';
+import { useAppSelector } from '../../app/hooks';
+import FilterBox from '../../components/filter';
+import { RootState } from '../../app/store';
 
 const LeadsPage: React.FC = () => {
-
   const isAuthenticated: string | null = localStorage.getItem("isAuthenticated");
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [isUserAuthenticated, setIsUserAuthenticated] = useState<boolean>(false);
-  const [creditCount, setCreditCount] = useState<number>(100);
+  const [isUserAuthenticated, setIsUserAuthenticated] = useState<boolean>(`${localStorage.getItem("isAuthenticated")}` === "true");
+  const creditCount = useAppSelector((state) => state.credit.credit);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [isFilterBoxVisible, setIsFilterBoxVisible] = useState(false);
+  const filterBoxRef = useRef<HTMLDivElement>(null);
+
+  const selectedLocations = useSelector((state: RootState) => state.locationFilter.selectedLocations);
+  const minScore = useSelector((state: RootState) => state.locationFilter.minScore);
 
   useEffect(() => {
     checkAuthentication();
-   }, []);
+  }, []);
 
-  const checkAuthentication = () => {    
-    if (isAuthenticated === "null") {
+  const checkAuthentication = () => {
+    if (isAuthenticated === null) {
       setIsUserAuthenticated(false);
       const user: string | null = prompt("Enter username:");
       if (user) {
@@ -30,8 +38,9 @@ const LeadsPage: React.FC = () => {
         const password: string | null = prompt("Enter password:");
         if (foundUser && foundUser.password === password) {
           alert("Login successful");
-          localStorage.setItem("isAuthenticated", `${isAuthenticated}`);
+          localStorage.setItem("isAuthenticated", "true");
           setIsUserAuthenticated(true);
+          localStorage.setItem("user", user);
           dispatch(setName(user));
         } else {
           alert("Invalid username or password");
@@ -43,7 +52,37 @@ const LeadsPage: React.FC = () => {
       }
     }
   }
-  
+
+  const filteredLeads = leads.filter(lead => {
+    const matchesLocation =
+      selectedLocations.length === 0 || selectedLocations.some(location =>
+        lead.location.toLowerCase().includes(location)
+      );
+    const matchesScore = lead.score >= minScore;
+    const matchesSearchTerm = lead.message.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesLocation && matchesScore && matchesSearchTerm;
+  });
+
+  const toggleFilterBox = () => {
+    setIsFilterBoxVisible((prev) => !prev);
+  };
+
+  const closeFilterBox = () => {
+    setIsFilterBoxVisible(false);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (filterBoxRef.current && !filterBoxRef.current.contains(event.target as Node)) {
+        setIsFilterBoxVisible(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
     <div className={`${!isUserAuthenticated ? 'blur-sm pointer-events-none select-none' : ''} flex h-screen w-screen`}>
@@ -60,16 +99,19 @@ const LeadsPage: React.FC = () => {
                 <div className="relative">
                   <input
                     type="text"
-                    placeholder="What is the best tool for XYZ XYZ..."
-                    className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg w-80"
+                    placeholder="What is the best tool for XYZ..."
+                    className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg w-80 placeholder-gray-400 bg-white text-gray-800"
+                    onChange={(e => setSearchTerm(e.target.value))}
                   />
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <div
+                    className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+                  >
                     <svg className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                   </div>
                   <button className="absolute inset-y-0 right-0 pr-3 flex items-center">
-                    <svg className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" onClick={() => setSearchTerm('')}>
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                     </svg>
                   </button>
@@ -81,23 +123,25 @@ const LeadsPage: React.FC = () => {
                   <span>{creditCount} credits</span>
                 </button>
                 <div className="flex items-center space-x-2">
-                  <div className="flex items-center justify-center bg-blue-50 text-blue-800 p-2 rounded-lg">
-                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                    </svg>
-                  </div>
                   <div className="relative">
-                    <button className="flex items-center space-x-1">
+                    <button className="flex items-center space-x-1" onClick={toggleFilterBox}>
                       <span>Filters</span>
-                      <span className="bg-blue-100 text-blue-800 rounded-full h-5 w-5 flex items-center justify-center text-xs">2</span>
                     </button>
+                    {isFilterBoxVisible && (
+                      <div
+                        ref={filterBoxRef}
+                        className="absolute top-0 right-0 bg-white border border-gray-300 rounded-lg shadow-lg p-4 w-[50vw] overflow-x-auto"
+                      >
+                        <FilterBox onClose={closeFilterBox} />
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
             </div>
-            
+
             <div className="space-y-4">
-              {leads.map(lead => (
+              {filteredLeads.map(lead => (
                 <LeadCard key={lead.id} lead={lead} />
               ))}
             </div>

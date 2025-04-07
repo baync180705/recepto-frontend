@@ -1,7 +1,8 @@
 import React from 'react';
 import { StatCardProps } from '../types/stats';
 
-const StatCard: React.FC<StatCardProps> = ({ title, value, icon, color }) => {
+const StatCard: React.FC<StatCardProps> = ({ title, countValue, icon, color }) => {
+
   return (
     <div className="bg-white rounded-lg shadow p-6">
       <div className="flex items-center justify-center mb-4">
@@ -25,7 +26,7 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, icon, color }) => {
       </div>
       <div className="text-center">
         <h3 className="text-sm text-gray-500">{title}</h3>
-        <p className="text-2xl font-bold">{value}</p>
+        <p className="text-2xl font-bold text-gray-300">{countValue}</p>
       </div>
     </div>
   );

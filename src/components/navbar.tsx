@@ -1,8 +1,6 @@
 import React from 'react';
-import { useAppSelector } from '../app/hooks';
 
 const Navbar: React.FC = () => {
-  const name = useAppSelector((state) => state.user.name);
   return (
     <header className="bg-white shadow-sm z-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -13,7 +11,7 @@ const Navbar: React.FC = () => {
                 <div className="relative">
                   <div className="flex items-center space-x-3">
                     <div className="flex flex-col items-end">
-                      <span className="text-sm font-medium text-gray-900">{name}</span>
+                      <span className="text-sm font-medium text-gray-900">{localStorage.getItem('user')}</span>
                       <span className="text-xs text-gray-500">Admin</span>
                     </div>
                     <div className="relative">

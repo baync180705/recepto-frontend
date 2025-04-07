@@ -1,4 +1,5 @@
 import { Lead } from "../types/leads";
+export const defaultUnlockCredits = 3;
 
 export const leads: Lead[] = [
     {
@@ -12,24 +13,24 @@ export const leads: Lead[] = [
       score: 99,
       company: "Org's Network",
       companyTier: 3,
-      jobDescription: "A team from *company name mentioned* is seeking a highly motivated Business Development Executive to outreach and secure bo...",
       updatedTime: "3 hours ago",
       groupName: "Group name",
-      avatarColor: "#3366cc"
+      avatarColor: "#3366cc",
+      unlockCredits: 3
     },
     {
       id: 2,
       name: "Jennifer Markus",
       location: "Mumbai, India",
-      isLocked: false,
-      message: "",
+      isLocked: true,
       company: "Org's Network",
       companyTier: 3,
-      jobDescription: "A team from *company name mentioned* is seeking a highly motivated Business Development Executive to outreach and secure bo...",
+      message: "A team from *company name mentioned* is seeking a highly motivated Business Development Executive to outreach and secure bo...",
       updatedTime: "3 hours ago",
       groupName: "Group name",
-      score: 74,
-      avatarColor: "#ffffff"
+      score: 56,
+      avatarColor: "#ffffff",
+      unlockCredits: 3
     },
     {
       id: 3,
@@ -47,53 +48,56 @@ export const leads: Lead[] = [
       id: 4,
       name: "Jennifer Markus",
       location: "Mumbai, India",
-      isLocked: false,
+      isLocked: true,
       unlockCredits: 3,
       company: "Org's Network",
       companyTier: 1,
-      jobDescription: "A team from *company name mentioned* is seeking a highly motivated Business Development Executive to outreach and secure bo...",
+      message: "A team from *company name mentioned* is seeking a highly motivated Business Development Executive to outreach and secure bo...",
       updatedTime: "Today",
       groupName: "Group name",
       score: 74,
-      avatarColor: "#cc3333"
+      avatarColor: "#cc3333",
     },
     {
       id: 5,
       name: "Jennifer Markus",
       location: "Mumbai, India",
-      isLocked: false,
+      isLocked: true,
       company: "Org's Network",
       companyTier: 3,
-      jobDescription: "A team from *company name mentioned* is seeking a highly motivated Business Development Executive to outreach and secure bo...",
+      message: "A team from *company name mentioned* is seeking a highly motivated Business Development Executive to outreach and secure bo...",
       updatedTime: "3 hours ago",
       groupName: "Group name",
       score: 74,
-      avatarColor: "#ffffff"
+      avatarColor: "#ffffff",
+      unlockCredits: 3
     },
     {
       id: 6,
       name: "Jennifer Markus",
       location: "Mumbai, India",
-      isLocked: false,
+      isLocked: true,
       company: "Org's Network",
       companyTier: 3,
-      jobDescription: "A team from *company name mentioned* is seeking a highly motivated Business Development Executive to outreach and secure bo...",
+      message: "A team from *company name mentioned* is seeking a highly motivated Business Development Executive to outreach and secure bo...",
       updatedTime: "3 hours ago",
       groupName: "Group name",
       score: 74,
-      avatarColor: "#ffffff"
+      avatarColor: "#ffffff",
+      unlockCredits: 3
     },
     {
       id: 7,
       name: "Jennifer Markus",
       location: "Mumbai, India",
-      isLocked: false,
+      isLocked: true,
       company: "Org's Network",
       companyTier: 3,
-      jobDescription: "A team from *company name mentioned* is seeking a highly motivated Business Development Executive to outreach and secure bo...",
+      message: "A team from *company name mentioned* is seeking a highly motivated Business Development Executive to outreach and secure bo...",
       updatedTime: "3 hours ago",
       groupName: "Group name",
       score: 74,
-      avatarColor: "#ffffff"
+      avatarColor: "#ffffff",
+      unlockCredits: 3
     },
   ];

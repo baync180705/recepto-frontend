@@ -1,6 +1,7 @@
 export interface StatCardProps {
+  key: number
   title: string;
-  value: string;
+  countValue: number;
   icon: string;
   color: string;
 }

@@ -4,13 +4,12 @@ export interface Lead {
     location: string;
     isLocked: boolean;
     unlockCredits?: number;
-    message?: string;
+    message: string;
     timeStatus?: string;
     source?: string;
-    score?: number;
+    score: number;
     company?: string;
     companyTier?: number;
-    jobDescription?: string;
     updatedTime?: string;
     groupName?: string;
     avatarColor: string;

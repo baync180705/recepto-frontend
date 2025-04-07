@@ -1,79 +1,62 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../../components/navbar';
 import Sidebar from '../../components/sidebar';
 import SourceCard from '../../components/source_card';
 import StatCard from '../../components/stat_card';
 import TeamTable from '../../components/team_table';
 import Pagination from '../../components/pagination';
+import { useAppSelector } from '../../app/hooks';
+import { sourceCards } from '../../data/charts';
+import { statCards } from '../../data/stats';
+import { useDispatch } from 'react-redux';
+import { setName } from '../../slices/user_slice';
+import users from '../../data/users';
+
 
 const Dashboard: React.FC = () => {
-  // Sample data
-  const sourceCards = [
-    {
-      id: 1,
-      icon: 'recepto',
-      title: 'ReceptoNet Leads',
-      total: 404,
-      chartData: {
-        labels: ['Jan', 'Mar', 'May'],
-        datasets: [
-          {
-            label: 'Leads',
-            data: [200, 250, 394],
-            borderColor: 'rgba(59, 130, 246, 1)',
-            backgroundColor: 'rgba(59, 130, 246, 0.1)',
-            tension: 0.4,
-            fill: true,
-          }
-        ]
-      },
-      stats: [
-        { label: 'Unlocked', value: '179 users', color: 'blue' },
-        { label: 'Yet to Unlock', value: '394 users', color: 'gray' }
-      ]
-    },
-    {
-      id: 2,
-      icon: 'facebook',
-      title: 'Org Network Leads',
-      total: 594,
-      chartData: {
-        labels: ['Jan', 'Mar', 'May'],
-        datasets: [
-          {
-            label: 'Leads',
-            data: [200, 300, 394],
-            borderColor: 'rgba(249, 115, 22, 1)',
-            backgroundColor: 'rgba(249, 115, 22, 0.1)',
-            tension: 0.4,
-            fill: true,
-          }
-        ]
-      },
-      stats: [
-        { label: 'Contacted', value: '179 users', color: 'orange' },
-        { label: 'Yet to Contact', value: '394 users', color: 'gray' }
-      ]
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [isUserAuthenticated, setIsUserAuthenticated] = useState<boolean>(`${localStorage.getItem("isAuthenticated")}` === "true");
+  const receptoNetScore: number = useAppSelector(state => state.receptoScore.score);
+  const otherNetScore: number = useAppSelector(state => state.otherScore.score);
+  const receptoLeadsGenerated: number = useAppSelector(state => state.receptoLeads.leadsGenerated);
+  const otherLeadsGenerated: number = useAppSelector(state => state.otherLeads.leadsGenerated);
+  const credits: number = useAppSelector(state => state.credit.credit);
+
+  const isAuthenticated: string | null = localStorage.getItem("isAuthenticated");
+
+  useEffect(() => {
+    checkAuthentication();
+  }, []);
+
+  const checkAuthentication = () => {
+    if (isAuthenticated === null) {
+      setIsUserAuthenticated(false);
+      const user: string | null = prompt("Enter username:");
+      if (user) {
+        const foundUser = users.find((u) => u.username === user);
+        const password: string | null = prompt("Enter password:");
+        if (foundUser && foundUser.password === password) {
+          alert("Login successful");
+          localStorage.setItem("isAuthenticated", "true");
+          setIsUserAuthenticated(true);
+          localStorage.setItem("user", user);
+          dispatch(setName(user));
+        } else {
+          alert("Invalid username or password");
+          navigate("/");
+        }
+      } else {
+        alert("Invalid username");
+        navigate("/");
+      }
     }
-  ];
-
-  const statCards = [
-    { id: 1, title: 'Liked Leads', value: '23.4K', icon: 'like', color: 'blue' },
-    { id: 2, title: 'Assigned Leads', value: '23.4K', icon: 'user', color: 'green' },
-    { id: 3, title: 'Liked Leads', value: '23.4K', icon: 'like', color: 'blue' },
-    { id: 4, title: 'Assigned Leads', value: '23.4K', icon: 'user', color: 'green' }
-  ];
-
-  const teamMembers = [
-    { id: 1, name: 'Olivia Rhye', lastActive: '2min ago', role: 'Admin', generated: 123, unlocked: 123, assigned: 40 },
-    { id: 2, name: 'Olivia Rhye', lastActive: '2min ago', role: 'Removed', generated: 23, unlocked: 23, assigned: 25 },
-    { id: 3, name: 'Olivia Rhye', lastActive: '2min ago', role: 'Member', generated: 56, unlocked: 56, assigned: 15 },
-    { id: 4, name: 'Olivia Rhye', lastActive: '2min ago', role: 'Admin', generated: 12, unlocked: 12, assigned: 10 },
-    { id: 5, name: 'Olivia Rhye', lastActive: '2min ago', role: 'Member', generated: 123, unlocked: 123, assigned: 5 }
-  ];
+  }
 
   return (
-    <div className="flex h-screen w-screen">
+    <div className={`${!isUserAuthenticated ? 'blur-sm pointer-events-none select-none' : ''} flex h-screen w-screen`}>
       <Sidebar />
       <div className="flex-1 flex flex-col overflow-hidden bg-gray-50">
         <Navbar />
@@ -88,12 +71,12 @@ const Dashboard: React.FC = () => {
               </div>
               <div className="ml-auto flex items-center">
                 <button className="flex items-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
-                  <span>0 credits</span>
+                  <span>{credits} credits</span>
                 </button>
                 <div className="ml-4 flex items-center space-x-2">
                   <div className="flex items-center">
                     <div className="flex flex-col items-end">
-                      <span className="text-sm font-medium text-gray-900">Anand Kumar</span>
+                      <span className="text-sm font-medium text-gray-900">{localStorage.getItem('user')}</span>
                       <span className="text-xs text-gray-500">Admin</span>
                     </div>
                     <div className="relative ml-3">
@@ -111,34 +94,53 @@ const Dashboard: React.FC = () => {
                 </div>
               </div>
             </div>
-            
+
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-              {sourceCards.map(card => (
-                <SourceCard 
-                  key={card.id}
-                  icon={card.icon}
-                  title={card.title}
-                  total={card.total}
-                  chartData={card.chartData}
-                  stats={card.stats}
-                />
-              ))}
+              {sourceCards.map(card => {
+                card.chartData.datasets[0].data[2] = card.title.split(' ')[0] === 'ReceptoNet' ? receptoLeadsGenerated : otherLeadsGenerated;
+                return (
+                  <SourceCard
+                    key={card.key}
+                    icon={card.icon}
+                    title={card.title}
+                    total={card.total}
+                    chartData={card.chartData}
+                    stats={card.stats}
+                  />
+                )
+              })}
             </div>
-            
+
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-              {statCards.map(card => (
-                <StatCard 
-                  key={card.id}
-                  title={card.title}
-                  value={card.value}
-                  icon={card.icon}
-                  color={card.color}
-                />
-              ))}
+
+              {statCards.map(card => {
+                if (card.title.split(' ')[1] === 'Liked') {
+                  return (
+                    <StatCard
+                      key={card.key}
+                      title={card.title}
+                      countValue={card.title.split(' ')[0] === 'ReceptoNet' ? receptoNetScore : otherNetScore}
+                      icon={card.icon}
+                      color={card.color}
+                    />
+                  )
+                }
+                if (card.title.split(' ')[1] === 'Assigned') {
+                  return (
+                    <StatCard
+                      key={card.key}
+                      title={card.title}
+                      countValue={card.title.split(' ')[0] === 'ReceptoNet' ? receptoLeadsGenerated : otherLeadsGenerated}
+                      icon={card.icon}
+                      color={card.color}
+                    />
+                  )
+                }
+              })}
             </div>
-            
+
             <div className="bg-white rounded-lg shadow overflow-hidden">
-              <TeamTable members={teamMembers} />
+              <TeamTable/>
               <Pagination currentPage={1} totalPages={7} />
             </div>
           </div>

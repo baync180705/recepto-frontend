@@ -14,7 +14,7 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages }) => {
       </div>
       <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
         <div>
-          {/* Pagination info could go here */}
+        {/* TODO: Implement Pagination */}
         </div>
         <div>
           <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">

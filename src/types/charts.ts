@@ -1,4 +1,5 @@
 export interface SourceCardProps {
+  key: number,
   icon: string;
   title: string;
   total: number;
@@ -40,7 +41,6 @@ export interface LineOptions {
           color: string;
         };
         ticks: {
-          // Define the type for ticks here if needed
           callback?: (value: number | string) => string;
         };
         min: number;

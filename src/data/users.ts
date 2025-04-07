@@ -1,4 +1,6 @@
-const users = [
+import { User } from "../types/users";
+
+const users: User[] = [
     { username: "user1", password: "test123" },
     { username: "user2", password: "pass123" },
     { username: "user3", password: "demo123" },

@@ -1,20 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useAppSelector, useAppDispatch } from '../app/hooks';
+import {updateRole}  from '../slices/leads_generated_slice';
+import { TeamMember } from '../types/team';
 
-interface TeamMember {
-  id: number;
-  name: string;
-  lastActive: string;
-  role: string;
-  generated: number;
-  unlocked: number;
-  assigned: number;
-}
+const TeamTable: React.FC = () => {
+  const [activeDropdown, setActiveDropdown] = useState<number | null>(null);
+  const dispatch = useAppDispatch();
+  const teamData = useAppSelector((state) => state.memberWiseLeads.teamMembers);
 
-interface TeamTableProps {
-  members: TeamMember[];
-}
+  const handleRoleChange = (memberId: number, newRole: string) => {
+    dispatch(updateRole({ id: memberId, role: newRole }));
+    setActiveDropdown(null);
+  };
 
-const TeamTable: React.FC<TeamTableProps> = ({ members }) => {
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full divide-y divide-gray-200">
@@ -51,7 +49,7 @@ const TeamTable: React.FC<TeamTableProps> = ({ members }) => {
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {members.map((member) => (
+          {teamData.map((member: TeamMember) => (
             <tr key={member.id}>
               <td className="px-6 py-4 whitespace-nowrap">
                 <div className="flex items-center">
@@ -91,12 +89,43 @@ const TeamTable: React.FC<TeamTableProps> = ({ members }) => {
                   </span>
                 </div>
               </td>
-              <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                <button className="text-gray-400 hover:text-gray-500">
+              <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium relative">
+                <button 
+                  className="text-gray-400 hover:text-gray-500"
+                  onClick={() => setActiveDropdown(activeDropdown === member.id ? null : member.id)}
+                >
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
                   </svg>
                 </button>
+
+                {activeDropdown === member.id && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10 border border-gray-200">
+                    {member.role === 'Removed' ? (
+                      <button
+                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        onClick={() => handleRoleChange(member.id, 'Member')}
+                      >
+                        Add to team
+                      </button>
+                    ) : (
+                      <>
+                        <button
+                          className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          onClick={() => handleRoleChange(member.id, member.role === 'Admin' ? 'Member' : 'Admin')}
+                        >
+                          {member.role === 'Admin' ? 'Change to Member' : 'Change to Admin'}
+                        </button>
+                        <button
+                          className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                          onClick={() => handleRoleChange(member.id, 'Removed')}
+                        >
+                          Remove from team
+                        </button>
+                      </>
+                    )}
+                  </div>
+                )}
               </td>
             </tr>
           ))}

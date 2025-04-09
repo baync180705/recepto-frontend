@@ -23,7 +23,7 @@ export const lineOptions: LineOptions = {
                 color: 'rgba(0, 0, 0, 0.05)',
             },
             ticks: {
-                callback: (value) => `$${value}`,
+                callback: (value) => `${value}`,
             },
             min: 0,
             max: 400,

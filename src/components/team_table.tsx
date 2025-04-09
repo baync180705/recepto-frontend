@@ -109,7 +109,7 @@ const TeamTable: React.FC = () => {
                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10 border border-gray-200">
                     {member.role === 'Removed' ? (
                       <button
-                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        className="custom block w-full text-left px-4 py-2 text-sm text-green-700 hover:bg-gray-100"
                         onClick={() => handleRoleChange(member.id, 'Member')}
                       >
                         Add to team
@@ -117,13 +117,13 @@ const TeamTable: React.FC = () => {
                     ) : (
                       <>
                         <button
-                          className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          className="custom block w-full text-left px-4 py-2 text-sm text-blue-700 hover:bg-gray-100"
                           onClick={() => handleRoleChange(member.id, member.role === 'Admin' ? 'Member' : 'Admin')}
                         >
                           {member.role === 'Admin' ? 'Change to Member' : 'Change to Admin'}
                         </button>
                         <button
-                          className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                          className="custom block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
                           onClick={() => handleRoleChange(member.id, 'Removed')}
                         >
                           Remove from team

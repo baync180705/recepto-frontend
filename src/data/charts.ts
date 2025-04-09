@@ -20,8 +20,8 @@ export const sourceCards: SourceCardProps[] = [
         ]
       },
       stats: [
-        { label: 'Unlocked', value: '179 users', color: 'blue' },
-        { label: 'Yet to Unlock', value: '394 users', color: 'gray' }
+        { label: 'Unlocked', value: '337 users', color: 'blue' },
+        { label: 'Yet to Unlock', value: '67 users', color: 'gray' }
       ]
     },
     {
@@ -43,8 +43,8 @@ export const sourceCards: SourceCardProps[] = [
         ]
       },
       stats: [
-        { label: 'Contacted', value: '179 users', color: 'orange' },
-        { label: 'Yet to Contact', value: '394 users', color: 'gray' }
+        { label: 'Contacted', value: '337 users', color: 'orange' },
+        { label: 'Yet to Contact', value: '257 users', color: 'gray' }
       ]
     }
   ];

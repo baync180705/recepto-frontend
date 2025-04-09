@@ -98,6 +98,8 @@ const Dashboard: React.FC = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
               {sourceCards.map(card => {
                 card.chartData.datasets[0].data[2] = card.title.split(' ')[0] === 'ReceptoNet' ? receptoLeadsGenerated : otherLeadsGenerated;
+                card.stats[0].value = card.title.split(' ')[0] === 'ReceptoNet' ? `${receptoLeadsGenerated} users` : `${otherLeadsGenerated} users`;
+                card.stats[1].value = card.title.split(' ')[0] === 'ReceptoNet' ? `${card.total - receptoLeadsGenerated} users` : `${card.total - otherLeadsGenerated} users`;
                 return (
                   <SourceCard
                     key={card.key}

@@ -49,7 +49,7 @@ const SourceCard: React.FC<SourceCardProps> = ({ icon, title, total, chartData, 
                 <div>
                     <h2 className="text-sm font-medium text-gray-600">{title}</h2>
                     <div className="flex items-center">
-                        <span className="text-2xl font-bold">{total}</span>
+                        <span className="text-2xl font-bold text-gray-400">{total}</span>
                         <span className="ml-2 text-xs text-gray-500">Total</span>
                     </div>
                 </div>
@@ -77,7 +77,7 @@ const SourceCard: React.FC<SourceCardProps> = ({ icon, title, total, chartData, 
                         ></div>
                         <div className="flex flex-col">
                             <span className="text-xs text-gray-500">{stat.label}</span>
-                            <span className="text-sm font-medium">{stat.value}</span>
+                            <span className="text-sm font-medium text-gray-400">{stat.value}</span>
                         </div>
                     </div>
                 ))}
